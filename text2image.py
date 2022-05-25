@@ -15,8 +15,8 @@ mode_to_bpp = {'1': 1, 'L': 8, 'P': 8, 'RGB': 24,
 
 class ImageGenerate():
     def __init__(self):
-        self.width = 48
-        self.height = 32
+        self.width = 32
+        self.height = 48
         self.chart_limit = 4
         self.real_path = getattr(
             sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -75,26 +75,33 @@ class ImageGenerate():
         image = Image.new('1', (self.width, self.height), (255))
         draw = ImageDraw.Draw(image)
         # draw.text((0, 8), text, font=font, fill=(0))
-
+        w =0
+        h = 0 
+        x  = 0
+        for index,item in enumerate(text):
+            if index ==0:
+                w,h= font.getsize(item)
+                x = (self.width - w)/2
+            draw.text((x, h*index), item, font=font, fill=(0))
         # Wrap the `text` string into a list of `CHAR_LIMIT`-character strings
-        text_lines = wrap(text, self.chart_limit)
-        print(text_lines)
-        # Get the first vertical coordinate at which to draw text and the height of each line of text
-        y, line_heights = self.get_y_and_heights(
-            text_lines, (self.width, self.height), 0, font
-        )
+        # text_lines = wrap(text, self.chart_limit)
+        # print(text_lines)
+        # # Get the first vertical coordinate at which to draw text and the height of each line of text
+        # y, line_heights = self.get_y_and_heights(
+        #     text_lines, (self.width, self.height), 0, font
+        # )
 
-        # Draw each line of text
-        for i, line in enumerate(text_lines):
-            # Calculate the horizontally-centered position at which to draw this line
-            line_width = font.getmask(line).getbbox()[2]
-            x = ((self.width - line_width) // 2)
+        # # Draw each line of text
+        # for i, line in enumerate(text_lines):
+        #     # Calculate the horizontally-centered position at which to draw this line
+        #     line_width = font.getmask(line).getbbox()[2]
+        #     x = ((self.width - line_width) // 2)
 
-            # Draw this line
-            draw.text((x, y), line, font=font, fill=(0))
+        #     # Draw this line
+        #     draw.text((x, y), line, font=font, fill=(0))
 
-            # Move on to the height at which the next line should be drawn at
-            y += line_heights[i]
+        #     # Move on to the height at which the next line should be drawn at
+        #     y += line_heights[i]
 
         image.save(image_name, 'bmp')
         return image_name
