@@ -1,4 +1,5 @@
 build/
 dist/
+res/
 __pycache__/
 *.pyc

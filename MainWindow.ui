@@ -143,14 +143,14 @@
      <widget class="QLabel" name="iv_image">
       <property name="minimumSize">
        <size>
-        <width>32</width>
-        <height>48</height>
+        <width>100</width>
+        <height>100</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>32</width>
-        <height>48</height>
+        <width>100</width>
+        <height>100</height>
        </size>
       </property>
       <property name="text">
