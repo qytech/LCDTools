@@ -7,7 +7,7 @@ import sys
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QStandardPaths
 from PyQt5.QtGui import QPixmap, QFont, QFontInfo, QFontDatabase
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFontDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFontDialog, QMessageBox
 
 from bmp2hex import bmp2hex
 from text2image import ImageGenerate
@@ -97,12 +97,16 @@ class MainWindow(QMainWindow):
 
         logging.debug(
             f'message {self.message} fontsize {self.font_size} fontFamily {self.font_family}')
+        try:
+            image_name = self.imageGenerate.generate(
+                self.message, self.font_family, self.font_size)
 
-        image_name = self.imageGenerate.generate(
-            self.message, self.font_family, self.font_size)
-
-        self.display_dist_image(image_name)
-        self.image_to_lcd(image_name)
+            self.display_dist_image(image_name)
+            self.image_to_lcd(image_name)
+        except:
+            QMessageBox(QMessageBox.NoIcon, 'Open File failed',
+                        'Unable to open the file').exec()
+            pass
 
     def image_to_lcd(self, image_name):
         result = bmp2hex(image_name, 8, 0,
