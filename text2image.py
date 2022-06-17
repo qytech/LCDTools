@@ -6,6 +6,7 @@ from textwrap import wrap
 import langid
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+import time
 
 from bmp2hex import bmp2hex
 
@@ -71,7 +72,8 @@ class ImageGenerate():
         print(f'{len(text)}  {font_family} {font_size}')
 
         font = ImageFont.truetype(font_family, font_size)
-        image_name = f'res/image_{text}.bmp'
+        # image_name = f'res/image_{text}.bmp'
+        image_name = f'res/image_{text}_{int(time.time())}.bmp'
         image = Image.new('1', (self.width, self.height), (255))
         draw = ImageDraw.Draw(image)
         # draw.text((0, 8), text, font=font, fill=(0))
@@ -83,7 +85,7 @@ class ImageGenerate():
             if index == 0:
                 w, h = font.getsize(item)
                 x = (self.width - w)/2
-                top = self.height * 0.25 // len(text)
+                top = (self.height - len(text)*h)/2
 
             draw.text((x, h*index + top), item, font=font, fill=(0))
         # Wrap the `text` string into a list of `CHAR_LIMIT`-character strings
