@@ -2,23 +2,24 @@
 # -*- coding=utf-8 -*-
 
 import logging
+import os
 import sys
 
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, QStandardPaths
-from PyQt5.QtGui import QPixmap, QFont, QFontInfo, QFontDatabase
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFontDialog, QMessageBox
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 
-from bmp2hex import bmp2hex
-from text2image import ImageGenerate
-from image2bmp import image_to_bmp
 from Ui_MainWindow import Ui_MainWindow
-import os
+from bmp2hex import bmp2hex
+from image2bmp import image_to_bmp
+from text2image import ImageGenerate
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 class MainWindow(QMainWindow):
+    RESOURCE_DIR = 'res'
+
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent=parent)
         self.ui = Ui_MainWindow()
@@ -97,13 +98,14 @@ class MainWindow(QMainWindow):
 
         logging.debug(
             f'message {self.message} fontsize {self.font_size} fontFamily {self.font_family}')
+        # noinspection PyBroadException
         try:
             image_name = self.imageGenerate.generate(
                 self.message, self.font_family, self.font_size)
 
             self.display_dist_image(image_name)
             self.image_to_lcd(image_name)
-        except:
+        except Exception as _:
             QMessageBox(QMessageBox.NoIcon, 'Open File failed',
                         'Unable to open the file').exec()
             pass
@@ -121,14 +123,16 @@ class MainWindow(QMainWindow):
         self.clean_cache()
         event.accept()
 
-    def clean_cache(self):
-        for item in os.listdir('res'):
+    @staticmethod
+    def clean_cache():
+        for item in os.listdir(MainWindow.RESOURCE_DIR):
             if item.endswith('bmp'):
-                os.remove(f'res/{item}')
+                os.remove(f'{MainWindow.RESOURCE_DIR}/{item}')
 
-    def create_folder(self):
-        if not os.path.exists('res'):
-            os.mkdir('res')
+    @staticmethod
+    def create_folder():
+        if not os.path.exists(MainWindow.RESOURCE_DIR):
+            os.mkdir(MainWindow.RESOURCE_DIR)
 
 
 def main():
