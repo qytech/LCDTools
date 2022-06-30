@@ -49,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.0
         with:
           name: lcdtoolds-${{ matrix.os }}
-          path: dist/main.*
+          path: dist/main*
 
       # - name: GH Release
       #   uses: softprops/action-gh-release@v0.1.14
